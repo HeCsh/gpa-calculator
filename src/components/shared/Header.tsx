@@ -11,7 +11,7 @@ export function Header() {
         </Link>
         <nav className="flex items-center gap-6 text-sm">
           <Link
-            href="/calculator"
+            href="/gpa-calculator"
             className="text-muted-foreground hover:text-foreground transition-colors"
           >
             Calculator

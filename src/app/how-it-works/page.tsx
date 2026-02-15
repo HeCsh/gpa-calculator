@@ -303,7 +303,7 @@ export default function HowItWorksPage() {
       <div className="text-center py-8">
         <h2 className="text-xl font-bold mb-4">Try It Yourself</h2>
         <Button asChild size="lg">
-          <Link href="/calculator">
+          <Link href="/gpa-calculator">
             Open the Calculator
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>

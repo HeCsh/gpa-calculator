@@ -16,13 +16,13 @@ export default function HomePage() {
             Calculate Your{" "}
             <span className="text-primary">High School GPA</span>
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-            Free GPA calculator that supports weighted, unweighted, and UC GPA
-            systems. Target any US college and see your GPA calculated their way.
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 text-left">
+            Free GPA calculator that supports weighted, unweighted, UC's and other college GPA
+            systems. Target any US college and see your GPA calculated their way. Customize the boost values to match your school's exact system.
           </p>
           <div className="flex gap-4 justify-center">
             <Button asChild size="lg">
-              <Link href="/calculator">
+              <Link href="/gpa-calculator">
                 Calculate Your GPA
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -40,19 +40,35 @@ export default function HomePage() {
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">
             GPA Systems We Support
           </h2>
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
             {GPA_TYPE_INFO.map((info) => (
-              <Card key={info.title} className="text-center">
+              <Link key={info.title} href="/gpa-calculator" className="block">
+                <Card className="text-center cursor-pointer transition-colors hover:bg-muted/80">
+                  <CardHeader>
+                    <CardTitle className="text-lg">{info.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">
+                      {info.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+            <Link href="/gpa-calculator" className="block">
+              <Card className="text-center cursor-pointer transition-colors hover:bg-muted/80">
                 <CardHeader>
-                  <CardTitle className="text-lg">{info.title}</CardTitle>
+                  <CardTitle className="text-lg">Custom GPA</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground">
-                    {info.description}
+                    Get the GPA for any college in US. We automatically fetch the
+                    grading criterion for all the top colleges. Define the weights
+                    and boosts and compute any custom GPA for any college worldwide.
                   </p>
                 </CardContent>
               </Card>
-            ))}
+            </Link>
           </div>
         </div>
       </section>
@@ -111,7 +127,7 @@ export default function HomePage() {
             It takes less than a minute. No sign-up required.
           </p>
           <Button asChild size="lg">
-            <Link href="/calculator">
+            <Link href="/gpa-calculator">
               Get Started
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>

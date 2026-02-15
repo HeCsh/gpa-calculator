@@ -20,7 +20,7 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-sm mb-3">Tools</h3>
             <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <Link href="/calculator" className="hover:text-foreground transition-colors">
+              <Link href="/gpa-calculator" className="hover:text-foreground transition-colors">
                 GPA Calculator
               </Link>
               <Link href="/how-it-works" className="hover:text-foreground transition-colors">
