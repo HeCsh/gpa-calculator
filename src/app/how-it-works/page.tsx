@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "How GPA Calculation Works",
   description:
     "Learn how different GPA systems work — unweighted, weighted, and UC GPA. Understand grade scales, course boosts, and special rules.",
+  alternates: {
+    canonical: "/how-it-works",
+  },
 };
 
 export default function HowItWorksPage() {
@@ -31,7 +34,11 @@ export default function HowItWorksPage() {
         <p className="text-muted-foreground mb-4">
           The unweighted GPA is the most widely used grading system. It treats
           all courses equally — an A in a regular English class is worth the
-          same as an A in AP Physics. The scale runs from 0.0 to 4.0.
+          same as an A in{" "}
+          <Link href="/ap-gpa-calculator" className="text-primary hover:underline">
+            AP Physics
+          </Link>
+          . The scale runs from 0.0 to 4.0.
         </p>
 
         <div className="rounded-lg border overflow-hidden mb-4">
@@ -101,7 +108,11 @@ export default function HowItWorksPage() {
           Weighted GPA (5.0 Scale)
         </h2>
         <p className="text-muted-foreground mb-4">
-          The weighted GPA rewards students for taking challenging courses. It
+          The{" "}
+          <Link href="/weighted-gpa-calculator" className="text-primary hover:underline">
+            weighted GPA
+          </Link>{" "}
+          rewards students for taking challenging courses. It
           adds extra &quot;boost&quot; points to your grade based on the course difficulty
           level. This means your GPA can exceed 4.0.
         </p>
@@ -165,8 +176,11 @@ export default function HowItWorksPage() {
       <section id="uc-gpa" className="mb-12">
         <h2 className="text-2xl font-bold mb-4">UC GPA System</h2>
         <p className="text-muted-foreground mb-4">
-          The University of California has its own GPA calculation system with
-          specific rules. Understanding this is crucial if you&apos;re applying to
+          The University of California has its own{" "}
+          <Link href="/uc-gpa-calculator" className="text-primary hover:underline">
+            GPA calculation system
+          </Link>{" "}
+          with specific rules. Understanding this is crucial if you&apos;re applying to
           any UC school (Berkeley, UCLA, San Diego, etc.).
         </p>
 
@@ -300,6 +314,42 @@ export default function HowItWorksPage() {
 
       <Separator className="my-8" />
 
+      {/* Related Pages */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold mb-4">Related Calculators</h2>
+        <div className="grid sm:grid-cols-3 gap-4">
+          <Link
+            href="/weighted-gpa-calculator"
+            className="rounded-lg border p-4 hover:bg-muted/50 transition-colors"
+          >
+            <h3 className="font-semibold mb-1">Weighted GPA Calculator</h3>
+            <p className="text-sm text-muted-foreground">
+              See how AP, IB, and Honors courses boost your GPA on a 5.0 scale.
+            </p>
+          </Link>
+          <Link
+            href="/uc-gpa-calculator"
+            className="rounded-lg border p-4 hover:bg-muted/50 transition-colors"
+          >
+            <h3 className="font-semibold mb-1">UC GPA Calculator</h3>
+            <p className="text-sm text-muted-foreground">
+              Calculate your Capped, Uncapped, and Unweighted UC GPA.
+            </p>
+          </Link>
+          <Link
+            href="/ap-gpa-calculator"
+            className="rounded-lg border p-4 hover:bg-muted/50 transition-colors"
+          >
+            <h3 className="font-semibold mb-1">AP GPA Calculator</h3>
+            <p className="text-sm text-muted-foreground">
+              See how Advanced Placement courses impact your weighted GPA.
+            </p>
+          </Link>
+        </div>
+      </section>
+
+      <Separator className="my-8" />
+
       <div className="text-center py-8">
         <h2 className="text-xl font-bold mb-4">Try It Yourself</h2>
         <Button asChild size="lg">
@@ -310,7 +360,7 @@ export default function HowItWorksPage() {
         </Button>
       </div>
 
-      {/* JSON-LD structured data */}
+      {/* JSON-LD structured data — Article */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -323,7 +373,48 @@ export default function HowItWorksPage() {
             author: {
               "@type": "Organization",
               name: "GPA Calculator",
+              url: "https://thegpacalculator.net",
             },
+          }),
+        }}
+      />
+      {/* JSON-LD structured data — HowTo */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: "How to Calculate Your GPA",
+            description:
+              "Step-by-step guide to calculating your high school GPA for college applications.",
+            step: [
+              {
+                "@type": "HowToStep",
+                name: "List your courses",
+                text: "List your courses with the letter grade you earned and the course type (Regular, Honors, AP, IB, or Dual Enrollment).",
+              },
+              {
+                "@type": "HowToStep",
+                name: "Convert grades to points",
+                text: "Convert each letter grade to grade points using the standard scale (A = 4.0, B+ = 3.3, B = 3.0, etc.).",
+              },
+              {
+                "@type": "HowToStep",
+                name: "Add course type boosts",
+                text: "For weighted GPA, add the boost for your course type: Honors +0.5, AP/IB HL +1.0, IB SL/Dual Enrollment +0.5.",
+              },
+              {
+                "@type": "HowToStep",
+                name: "Multiply by credits",
+                text: "Multiply each course's final grade points by its credit value to get quality points.",
+              },
+              {
+                "@type": "HowToStep",
+                name: "Calculate your GPA",
+                text: "Add up all quality points and divide by total credits. The result is your GPA.",
+              },
+            ],
           }),
         }}
       />

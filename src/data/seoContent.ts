@@ -4,18 +4,21 @@ export const GPA_TYPE_INFO = [
     description:
       "The most common GPA scale. Every class is worth the same — an A is 4.0 whether it's a regular class or AP. Most colleges use this as a baseline.",
     icon: "scale" as const,
+    href: "/gpa-calculator",
   },
   {
     title: "Weighted GPA (5.0 Scale)",
     description:
       "Rewards you for taking harder classes. Honors courses get +0.5 and AP/IB courses get +1.0 added to your grade points, so an A in AP is 5.0.",
     icon: "trophy" as const,
+    href: "/weighted-gpa-calculator",
   },
   {
     title: "UC GPA (Capped Weighted)",
     description:
       "Used by University of California schools. Adds +1.0 for honors courses but limits you to 8 semesters of extra points. Only a-g courses count.",
     icon: "graduation" as const,
+    href: "/uc-gpa-calculator",
   },
 ];
 

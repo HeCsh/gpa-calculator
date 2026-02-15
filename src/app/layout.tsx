@@ -9,7 +9,13 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
+const BASE_URL = "https://thegpacalculator.net";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
+  alternates: {
+    canonical: "/",
+  },
   title: {
     default: "GPA Calculator — Weighted, Unweighted & UC GPA for High School",
     template: "%s | GPA Calculator",
@@ -32,6 +38,7 @@ export const metadata: Metadata = {
       "Calculate your weighted, unweighted, and UC GPA. Supports AP, IB, Honors courses for any target college.",
     type: "website",
     locale: "en_US",
+    url: BASE_URL,
   },
   robots: {
     index: true,

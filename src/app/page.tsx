@@ -42,8 +42,8 @@ export default function HomePage() {
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
             {GPA_TYPE_INFO.map((info) => (
-              <Link key={info.title} href="/gpa-calculator" className="block">
-                <Card className="text-center cursor-pointer transition-colors hover:bg-muted/80">
+              <Link key={info.title} href={info.href} className="block">
+                <Card className="text-center cursor-pointer transition-colors hover:bg-muted/80 h-full">
                   <CardHeader>
                     <CardTitle className="text-lg">{info.title}</CardTitle>
                   </CardHeader>
@@ -56,7 +56,7 @@ export default function HomePage() {
               </Link>
             ))}
             <Link href="/gpa-calculator" className="block">
-              <Card className="text-center cursor-pointer transition-colors hover:bg-muted/80">
+              <Card className="text-center cursor-pointer transition-colors hover:bg-muted/80 h-full">
                 <CardHeader>
                   <CardTitle className="text-lg">Custom GPA</CardTitle>
                 </CardHeader>
@@ -135,7 +135,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* JSON-LD structured data */}
+      {/* JSON-LD structured data — WebApplication */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -143,6 +143,7 @@ export default function HomePage() {
             "@context": "https://schema.org",
             "@type": "WebApplication",
             name: "GPA Calculator",
+            url: "https://thegpacalculator.net",
             description:
               "Free GPA calculator for high school students. Calculate weighted, unweighted, and UC GPA.",
             applicationCategory: "EducationalApplication",
@@ -152,6 +153,24 @@ export default function HomePage() {
               price: "0",
               priceCurrency: "USD",
             },
+          }),
+        }}
+      />
+      {/* JSON-LD structured data — FAQPage */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: FAQS.map((faq) => ({
+              "@type": "Question",
+              name: faq.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: faq.answer,
+              },
+            })),
           }),
         }}
       />
