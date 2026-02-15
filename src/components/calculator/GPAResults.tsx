@@ -22,6 +22,7 @@ import { GPATrendChart } from "./GPATrendChart";
 interface GPAResultsProps {
   results: GPAResult[];
   label: string;
+  isCumulative?: boolean;
 }
 
 function getGPAColor(gpa: number, max: number): string {
@@ -32,7 +33,7 @@ function getGPAColor(gpa: number, max: number): string {
   return "text-red-600";
 }
 
-export function GPAResults({ results, label }: GPAResultsProps) {
+export function GPAResults({ results, label, isCumulative }: GPAResultsProps) {
   if (results.length === 0) {
     return (
       <div className="text-center py-8 text-muted-foreground">
@@ -83,7 +84,9 @@ export function GPAResults({ results, label }: GPAResultsProps) {
                 </div>
                 {notCounted && (
                   <p className="text-xs text-muted-foreground mt-1 italic">
-                    UCs do not count this semester toward your GPA.
+                    {isCumulative
+                      ? "No eligible semesters for UC GPA yet. Showing all semesters for reference."
+                      : "UCs do not count this semester toward your GPA."}
                   </p>
                 )}
                 {percentile !== null && (

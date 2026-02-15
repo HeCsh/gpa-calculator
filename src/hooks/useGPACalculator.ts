@@ -222,11 +222,20 @@ export function useGPACalculator() {
     }
 
     // Attach labels to breakdown entries + semester trend
+    // For UC profiles with no eligible credits, recalculate with skipGradeFilter
     return results.map((r) => {
       // Find the matching profile from activeProfiles
       const profile = activeProfiles.find(
         (p) => p.id === r.profileId
       );
+
+      // If UC profile has 0 eligible credits, show GPA from all courses greyed out
+      const isUCProfile = profile && /^(college-)?uc-/.test(profile.id);
+      let result = r;
+      if (isUCProfile && r.totalCredits === 0 && courses.length > 0) {
+        const fallback = calculateGPA(courses, profile, boosts, true);
+        result = { ...fallback, notCountedByUC: true };
+      }
 
       const semesterTrend = profile
         ? semesterOrder
@@ -249,9 +258,9 @@ export function useGPACalculator() {
         : undefined;
 
       return {
-        ...r,
+        ...result,
         semesterTrend,
-        breakdown: r.breakdown.map((b) => ({
+        breakdown: result.breakdown.map((b) => ({
           ...b,
           semesterLabel: courseSemLabel.get(b.courseId),
         })),

@@ -147,7 +147,7 @@ export default function CalculatorPage() {
         {viewMode === "semester" ? (
           <GPAResults results={semesterResults} label="Semester GPA" />
         ) : (
-          <GPAResults results={cumulativeResults} label="Cumulative GPA" />
+          <GPAResults results={cumulativeResults} label="Cumulative GPA" isCumulative />
         )}
       </div>
 
