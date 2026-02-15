@@ -6,7 +6,7 @@ import type { Semester } from "@/lib/gpa/types";
 import { useLocalStorage } from "./useLocalStorage";
 
 const DEFAULT_SEMESTERS: Semester[] = [
-  { id: "sem-1", name: "9th Grade — Sem 1", gradeLevel: "9" },
+  { id: "sem-1", name: "9th Gr, Sem-1", gradeLevel: "9" },
 ];
 
 export function useSemesterManager() {

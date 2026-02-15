@@ -1,5 +1,12 @@
 import type { Course, GPAProfile, GPAResult, CourseBreakdown } from "./types";
 
+// UC GPA only counts 10th and 11th grade courses
+const UC_ELIGIBLE_GRADES = new Set(["10", "11"]);
+
+function isUCGradeEligible(course: Course): boolean {
+  return course.gradeLevel != null && UC_ELIGIBLE_GRADES.has(course.gradeLevel);
+}
+
 function buildBreakdown(
   course: Course,
   profile: GPAProfile,
@@ -24,17 +31,72 @@ function buildBreakdown(
   };
 }
 
-export function calculateUCCapped(
+function splitUCCourses(
   courses: Course[],
+  skipGradeFilter = false
+): { eligible: Course[]; excluded: Course[]; hasGradeExcluded: boolean } {
+  const eligible: Course[] = [];
+  const excluded: Course[] = [];
+  let hasGradeExcluded = false;
+
+  for (const c of courses) {
+    if (c.isAG === false) {
+      excluded.push(c);
+    } else if (!isUCGradeEligible(c)) {
+      hasGradeExcluded = true;
+      if (skipGradeFilter) {
+        eligible.push(c); // Include for display but flag it
+      } else {
+        excluded.push(c);
+      }
+    } else {
+      eligible.push(c);
+    }
+  }
+
+  return { eligible, excluded, hasGradeExcluded };
+}
+
+function buildExcludedBreakdown(courses: Course[], profile: GPAProfile): CourseBreakdown[] {
+  return courses.map((course) => {
+    const reason = course.isAG === false
+      ? "Not an A-G course"
+      : "Only 10th & 11th grade count for UC GPA";
+    return buildBreakdown(course, profile, 0, true, reason);
+  });
+}
+
+function computeResult(
+  breakdown: CourseBreakdown[],
   profile: GPAProfile
 ): GPAResult {
-  // Filter to A-G courses only
-  const agCourses = courses.filter((c) => c.isAG !== false);
-  const nonAGCourses = courses.filter((c) => c.isAG === false);
+  const included = breakdown.filter((b) => !b.excluded);
+  const totalCredits = included.reduce((sum, b) => sum + b.credits, 0);
+  const totalQualityPoints = included.reduce(
+    (sum, b) => sum + b.qualityPoints,
+    0
+  );
+  const gpa = totalCredits > 0 ? totalQualityPoints / totalCredits : 0;
+
+  return {
+    gpa: Math.round(gpa * 100) / 100,
+    profileId: profile.id,
+    profileName: profile.name,
+    totalCredits,
+    totalQualityPoints,
+    breakdown,
+  };
+}
+
+export function calculateUCCapped(
+  courses: Course[],
+  profile: GPAProfile,
+  skipGradeFilter = false
+): GPAResult {
+  const { eligible, excluded, hasGradeExcluded } = splitUCCourses(courses, skipGradeFilter);
 
   // Determine which courses get honors boost
-  // Sort by grade level (10th first, then 11th) to apply cap correctly
-  const honorsEligible = agCourses.filter(
+  const honorsEligible = eligible.filter(
     (c) =>
       c.courseType !== "Regular" &&
       c.courseType !== "IB_SL" &&
@@ -56,47 +118,32 @@ export function calculateUCCapped(
 
   const breakdown: CourseBreakdown[] = [];
 
-  for (const course of agCourses) {
+  for (const course of eligible) {
     const boost = boostedCourseIds.has(course.id)
       ? profile.boostSystem[course.courseType]
       : 0;
     breakdown.push(buildBreakdown(course, profile, boost, false));
   }
 
-  for (const course of nonAGCourses) {
-    breakdown.push(
-      buildBreakdown(course, profile, 0, true, "Not an A-G course")
-    );
+  breakdown.push(...buildExcludedBreakdown(excluded, profile));
+
+  const result = computeResult(breakdown, profile);
+  if (skipGradeFilter && hasGradeExcluded) {
+    result.notCountedByUC = true;
   }
-
-  const included = breakdown.filter((b) => !b.excluded);
-  const totalCredits = included.reduce((sum, b) => sum + b.credits, 0);
-  const totalQualityPoints = included.reduce(
-    (sum, b) => sum + b.qualityPoints,
-    0
-  );
-  const gpa = totalCredits > 0 ? totalQualityPoints / totalCredits : 0;
-
-  return {
-    gpa: Math.round(gpa * 100) / 100,
-    profileId: profile.id,
-    profileName: profile.name,
-    totalCredits,
-    totalQualityPoints,
-    breakdown,
-  };
+  return result;
 }
 
 export function calculateUCUncapped(
   courses: Course[],
-  profile: GPAProfile
+  profile: GPAProfile,
+  skipGradeFilter = false
 ): GPAResult {
-  const agCourses = courses.filter((c) => c.isAG !== false);
-  const nonAGCourses = courses.filter((c) => c.isAG === false);
+  const { eligible, excluded, hasGradeExcluded } = splitUCCourses(courses, skipGradeFilter);
 
   const breakdown: CourseBreakdown[] = [];
 
-  for (const course of agCourses) {
+  for (const course of eligible) {
     const isHonorsEligible =
       course.courseType !== "Regular" &&
       course.courseType !== "IB_SL" &&
@@ -108,26 +155,33 @@ export function calculateUCUncapped(
     breakdown.push(buildBreakdown(course, profile, boost, false));
   }
 
-  for (const course of nonAGCourses) {
-    breakdown.push(
-      buildBreakdown(course, profile, 0, true, "Not an A-G course")
-    );
+  breakdown.push(...buildExcludedBreakdown(excluded, profile));
+
+  const result = computeResult(breakdown, profile);
+  if (skipGradeFilter && hasGradeExcluded) {
+    result.notCountedByUC = true;
+  }
+  return result;
+}
+
+export function calculateUCUnweighted(
+  courses: Course[],
+  profile: GPAProfile,
+  skipGradeFilter = false
+): GPAResult {
+  const { eligible, excluded, hasGradeExcluded } = splitUCCourses(courses, skipGradeFilter);
+
+  const breakdown: CourseBreakdown[] = [];
+
+  for (const course of eligible) {
+    breakdown.push(buildBreakdown(course, profile, 0, false));
   }
 
-  const included = breakdown.filter((b) => !b.excluded);
-  const totalCredits = included.reduce((sum, b) => sum + b.credits, 0);
-  const totalQualityPoints = included.reduce(
-    (sum, b) => sum + b.qualityPoints,
-    0
-  );
-  const gpa = totalCredits > 0 ? totalQualityPoints / totalCredits : 0;
+  breakdown.push(...buildExcludedBreakdown(excluded, profile));
 
-  return {
-    gpa: Math.round(gpa * 100) / 100,
-    profileId: profile.id,
-    profileName: profile.name,
-    totalCredits,
-    totalQualityPoints,
-    breakdown,
-  };
+  const result = computeResult(breakdown, profile);
+  if (skipGradeFilter && hasGradeExcluded) {
+    result.notCountedByUC = true;
+  }
+  return result;
 }

@@ -8,21 +8,21 @@ import { CourseEntry } from "./CourseEntry";
 interface CourseListProps {
   courses: Course[];
   semesterId: string;
+  gradeLevel?: string;
   onAdd: (course: Omit<Course, "id">) => void;
   onUpdate: (id: string, updates: Partial<Course>) => void;
   onRemove: (id: string) => void;
   showAG?: boolean;
-  showGradeLevel?: boolean;
 }
 
 export function CourseList({
   courses,
   semesterId,
+  gradeLevel,
   onAdd,
   onUpdate,
   onRemove,
   showAG = false,
-  showGradeLevel = false,
 }: CourseListProps) {
   const handleAddCourse = () => {
     onAdd({
@@ -32,6 +32,7 @@ export function CourseList({
       credits: 1,
       semesterId,
       isAG: true,
+      gradeLevel: (gradeLevel as Course["gradeLevel"]) || undefined,
     });
   };
 
@@ -39,15 +40,14 @@ export function CourseList({
     <div>
       {/* Header row */}
       <div className="grid grid-cols-12 gap-2 text-xs font-medium text-muted-foreground uppercase tracking-wider pb-2 border-b">
-        <div className={showAG || showGradeLevel ? "col-span-3" : "col-span-4"}>
+        <div className={showAG ? "col-span-3" : "col-span-4"}>
           Course
         </div>
         <div className="col-span-2">Grade</div>
         <div className="col-span-3">Type</div>
         <div className="col-span-1">Credits</div>
         {showAG && <div className="col-span-1 text-center">a-g</div>}
-        {showGradeLevel && <div className="col-span-1">Year</div>}
-        <div className={showAG || showGradeLevel ? "col-span-1" : "col-span-2"} />
+        <div className={showAG ? "col-span-1" : "col-span-2"} />
       </div>
 
       {/* Course rows */}
@@ -63,7 +63,6 @@ export function CourseList({
             onUpdate={(updates) => onUpdate(course.id, updates)}
             onRemove={() => onRemove(course.id)}
             showAG={showAG}
-            showGradeLevel={showGradeLevel}
           />
         ))
       )}

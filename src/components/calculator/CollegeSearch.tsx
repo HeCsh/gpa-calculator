@@ -16,6 +16,7 @@ export function CollegeSearch({ value, onChange }: CollegeSearchProps) {
   const [query, setQuery] = useState("");
   const [colleges, setColleges] = useState<College[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -51,6 +52,7 @@ export function CollegeSearch({ value, onChange }: CollegeSearchProps) {
         !inputRef.current.contains(e.target as Node)
       ) {
         setIsOpen(false);
+        setIsEditing(false);
       }
     }
     document.addEventListener("mousedown", handleClick);
@@ -61,6 +63,15 @@ export function CollegeSearch({ value, onChange }: CollegeSearchProps) {
     onChange(college);
     setQuery("");
     setIsOpen(false);
+    setIsEditing(false);
+  };
+
+  const startEditing = () => {
+    setIsEditing(true);
+    setQuery(value?.name ?? "");
+    setIsOpen(true);
+    setHighlightedIndex(0);
+    setTimeout(() => inputRef.current?.focus(), 0);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -75,6 +86,7 @@ export function CollegeSearch({ value, onChange }: CollegeSearchProps) {
       handleSelect(results[highlightedIndex]);
     } else if (e.key === "Escape") {
       setIsOpen(false);
+      setIsEditing(false);
     }
   };
 
@@ -95,8 +107,11 @@ export function CollegeSearch({ value, onChange }: CollegeSearchProps) {
     <div className="space-y-2">
       <label className="text-sm font-medium">Target College / Program</label>
 
-      {value ? (
-        <div className="flex items-center gap-2 p-2 border rounded-md bg-muted/50">
+      {value && !isEditing ? (
+        <div
+          className="flex items-center gap-2 p-2 border rounded-md bg-muted/50 cursor-text"
+          onClick={startEditing}
+        >
           <Search className="h-4 w-4 text-muted-foreground shrink-0" />
           <span className="text-sm font-medium flex-1">{value.name}</span>
           <Badge variant="secondary" className="text-xs">
@@ -108,7 +123,11 @@ export function CollegeSearch({ value, onChange }: CollegeSearchProps) {
             </Badge>
           )}
           <button
-            onClick={() => onChange(null)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onChange(null);
+              setIsEditing(false);
+            }}
             className="text-muted-foreground hover:text-foreground"
           >
             <X className="h-4 w-4" />

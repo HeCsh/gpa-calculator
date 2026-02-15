@@ -113,6 +113,14 @@ export interface CourseBreakdown {
   qualityPoints: number;
   excluded?: boolean;
   excludeReason?: string;
+  semesterLabel?: string;
+}
+
+export interface SemesterGPAPoint {
+  label: string;      // e.g. "Gr9S1"
+  semesterId: string;
+  gpa: number;
+  notCountedByUC?: boolean;
 }
 
 export interface GPAResult {
@@ -122,4 +130,6 @@ export interface GPAResult {
   totalCredits: number;
   totalQualityPoints: number;
   breakdown: CourseBreakdown[];
+  semesterTrend?: SemesterGPAPoint[];
+  notCountedByUC?: boolean;
 }

@@ -25,6 +25,7 @@ export default function CalculatorPage() {
     selectedSemester,
     setSelectedSemester,
     activeProfiles,
+    collegeUsesStandardGPA,
     customBoosts,
     setCustomBoosts,
     semesterResults,
@@ -38,7 +39,7 @@ export default function CalculatorPage() {
   } = useGPACalculator();
 
   const [viewMode, setViewMode] = useState<"semester" | "cumulative">(
-    "semester"
+    "cumulative"
   );
 
   const hasUCProfile = activeProfiles.some((p) => p.id.startsWith("uc-"));
@@ -59,7 +60,13 @@ export default function CalculatorPage() {
           value={selectedCollege}
           onChange={setSelectedCollege}
         />
-        {selectedCollege && (
+        {selectedCollege && collegeUsesStandardGPA && (
+          <p className="text-xs text-muted-foreground mt-2">
+            <strong>{selectedCollege.name}</strong> uses the standard
+            Unweighted and Weighted GPA.
+          </p>
+        )}
+        {selectedCollege && !collegeUsesStandardGPA && (
           <p className="text-xs text-muted-foreground mt-2">
             Showing GPA calculations for{" "}
             <strong>{selectedCollege.name}</strong>
@@ -101,11 +108,11 @@ export default function CalculatorPage() {
         <CourseList
           courses={activeSemesterCourses}
           semesterId={activeSemesterId}
+          gradeLevel={selectedGradeLevel}
           onAdd={addCourse}
           onUpdate={updateCourse}
           onRemove={removeCourse}
           showAG={hasUCProfile}
-          showGradeLevel={hasUCProfile}
         />
       </div>
 
@@ -121,10 +128,10 @@ export default function CalculatorPage() {
             }
           >
             <TabsList>
-              <TabsTrigger value="semester">Semester GPA</TabsTrigger>
               <TabsTrigger value="cumulative" disabled={courses.length === 0}>
                 Cumulative GPA
               </TabsTrigger>
+              <TabsTrigger value="semester">Semester GPA</TabsTrigger>
             </TabsList>
           </Tabs>
 

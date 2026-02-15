@@ -18,7 +18,6 @@ interface CourseEntryProps {
   onUpdate: (updates: Partial<Course>) => void;
   onRemove: () => void;
   showAG?: boolean;
-  showGradeLevel?: boolean;
 }
 
 export function CourseEntry({
@@ -26,11 +25,10 @@ export function CourseEntry({
   onUpdate,
   onRemove,
   showAG = false,
-  showGradeLevel = false,
 }: CourseEntryProps) {
   return (
     <div className="grid grid-cols-12 gap-2 items-center py-2">
-      <div className={showAG || showGradeLevel ? "col-span-3" : "col-span-4"}>
+      <div className={showAG ? "col-span-3" : "col-span-4"}>
         <Input
           placeholder="Course name"
           value={course.name}
@@ -102,30 +100,7 @@ export function CourseEntry({
         </div>
       )}
 
-      {showGradeLevel && (
-        <div className="col-span-1">
-          <Select
-            value={course.gradeLevel || ""}
-            onValueChange={(v) =>
-              onUpdate({
-                gradeLevel: v as Course["gradeLevel"],
-              })
-            }
-          >
-            <SelectTrigger className="text-xs">
-              <SelectValue placeholder="Yr" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="9">9th</SelectItem>
-              <SelectItem value="10">10th</SelectItem>
-              <SelectItem value="11">11th</SelectItem>
-              <SelectItem value="12">12th</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
-      <div className={showAG || showGradeLevel ? "col-span-1" : "col-span-2 flex justify-end"}>
+      <div className={showAG ? "col-span-1" : "col-span-2 flex justify-end"}>
         <Button
           variant="ghost"
           size="icon"

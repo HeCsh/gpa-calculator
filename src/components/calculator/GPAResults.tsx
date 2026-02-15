@@ -16,6 +16,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import type { GPAResult } from "@/lib/gpa/types";
 import { COURSE_TYPE_LABELS } from "@/lib/gpa/types";
+import { getPercentileForProfile } from "@/data/gpaPercentiles";
+import { GPATrendChart } from "./GPATrendChart";
 
 interface GPAResultsProps {
   results: GPAResult[];
@@ -50,8 +52,17 @@ export function GPAResults({ results, label }: GPAResultsProps) {
             ? 5.0
             : 4.0;
 
+          const notCounted = result.notCountedByUC === true;
+
+          const percentile = !notCounted
+            ? getPercentileForProfile(result.profileId, result.gpa)
+            : null;
+
           return (
-            <Card key={result.profileId}>
+            <Card
+              key={result.profileId}
+              className={notCounted ? "opacity-60" : ""}
+            >
               <CardHeader className="pb-2">
                 <CardTitle className="text-base">
                   {result.profileName}
@@ -62,13 +73,31 @@ export function GPAResults({ results, label }: GPAResultsProps) {
               </CardHeader>
               <CardContent>
                 <div
-                  className={`text-4xl font-bold tabular-nums ${getGPAColor(
-                    result.gpa,
-                    maxGPA
-                  )}`}
+                  className={`text-4xl font-bold tabular-nums ${
+                    notCounted
+                      ? "text-muted-foreground"
+                      : getGPAColor(result.gpa, maxGPA)
+                  }`}
                 >
                   {result.gpa.toFixed(2)}
                 </div>
+                {notCounted && (
+                  <p className="text-xs text-muted-foreground mt-1 italic">
+                    UCs do not count this semester toward your GPA.
+                  </p>
+                )}
+                {percentile !== null && (
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Top {100 - percentile}% nationally
+                  </p>
+                )}
+
+                {result.semesterTrend && result.semesterTrend.length >= 2 && (
+                  <GPATrendChart
+                    data={result.semesterTrend}
+                    maxGPA={maxGPA}
+                  />
+                )}
 
                 <Accordion type="single" collapsible className="mt-3">
                   <AccordionItem value="breakdown" className="border-none">
@@ -87,6 +116,11 @@ export function GPAResults({ results, label }: GPAResultsProps) {
                             <div className="flex items-center gap-2 min-w-0">
                               <span className="truncate">
                                 {b.courseName || "Untitled"}
+                                {b.semesterLabel && (
+                                  <span className="text-muted-foreground ml-1">
+                                    ({b.semesterLabel})
+                                  </span>
+                                )}
                               </span>
                               {b.courseType !== "Regular" && (
                                 <Badge

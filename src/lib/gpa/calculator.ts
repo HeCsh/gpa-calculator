@@ -1,10 +1,11 @@
 import type { Course, GPAProfile, GPAResult, CourseBreakdown } from "./types";
-import { calculateUCCapped, calculateUCUncapped } from "./specialRules";
+import { calculateUCCapped, calculateUCUncapped, calculateUCUnweighted } from "./specialRules";
 
 export function calculateGPA(
   courses: Course[],
   profile: GPAProfile,
-  customBoosts?: Partial<GPAProfile["boostSystem"]>
+  customBoosts?: Partial<GPAProfile["boostSystem"]>,
+  skipGradeFilter = false
 ): GPAResult {
   const effectiveProfile = customBoosts
     ? {
@@ -13,12 +14,16 @@ export function calculateGPA(
       }
     : profile;
 
-  // UC special calculations
-  if (profile.id === "uc-capped") {
-    return calculateUCCapped(courses, effectiveProfile);
+  // UC special calculations (check both original and college-branded IDs)
+  const baseId = profile.id.replace(/^college-/, "");
+  if (baseId === "uc-capped") {
+    return calculateUCCapped(courses, effectiveProfile, skipGradeFilter);
   }
-  if (profile.id === "uc-uncapped") {
-    return calculateUCUncapped(courses, effectiveProfile);
+  if (baseId === "uc-uncapped") {
+    return calculateUCUncapped(courses, effectiveProfile, skipGradeFilter);
+  }
+  if (baseId === "uc-unweighted") {
+    return calculateUCUnweighted(courses, effectiveProfile, skipGradeFilter);
   }
 
   // Standard calculation
@@ -61,7 +66,8 @@ export function calculateGPA(
 export function calculateMultipleGPAs(
   courses: Course[],
   profiles: GPAProfile[],
-  customBoosts?: Partial<GPAProfile["boostSystem"]>
+  customBoosts?: Partial<GPAProfile["boostSystem"]>,
+  skipGradeFilter = false
 ): GPAResult[] {
-  return profiles.map((profile) => calculateGPA(courses, profile, customBoosts));
+  return profiles.map((profile) => calculateGPA(courses, profile, customBoosts, skipGradeFilter));
 }
