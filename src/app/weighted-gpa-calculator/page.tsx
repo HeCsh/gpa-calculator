@@ -3,9 +3,14 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { QuickAnswer } from "@/components/shared/QuickAnswer";
+import { FAQSection } from "@/components/shared/FAQSection";
+import { LastUpdated } from "@/components/shared/LastUpdated";
+import { WEIGHTED_FAQS } from "@/data/seoContent";
 
 export const metadata: Metadata = {
-  title: "Weighted GPA Calculator — Calculate Your 5.0 Scale GPA",
+  title: "Weighted GPA Calculator 2025-2026 — Calculate Your 5.0 Scale GPA",
   description:
     "Free weighted GPA calculator for high school students. See how AP, IB, Honors, and Dual Enrollment courses boost your GPA on a 5.0 scale. Customize boost values to match your school.",
   alternates: {
@@ -16,6 +21,8 @@ export const metadata: Metadata = {
 export default function WeightedGPACalculatorPage() {
   return (
     <article className="container mx-auto px-4 py-12 max-w-3xl">
+      <Breadcrumbs items={[{ label: "Weighted GPA Calculator", href: "/weighted-gpa-calculator" }]} />
+
       <h1 className="text-3xl md:text-4xl font-bold mb-4">
         Weighted GPA Calculator
       </h1>
@@ -23,6 +30,11 @@ export default function WeightedGPACalculatorPage() {
         Calculate your weighted GPA on a 5.0 scale. See how AP, IB, Honors, and
         Dual Enrollment courses boost your GPA above the standard 4.0.
       </p>
+
+      <QuickAnswer
+        question="What is a good weighted GPA?"
+        answer="A weighted GPA of 4.0+ on a 5.0 scale is considered good. For competitive colleges, aim for 4.3+. The national average weighted GPA is approximately 3.38."
+      />
 
       <div className="flex gap-4 mb-8">
         <Button asChild size="lg">
@@ -142,6 +154,8 @@ export default function WeightedGPACalculatorPage() {
         </ul>
       </section>
 
+      <FAQSection faqs={WEIGHTED_FAQS} />
+
       <Separator className="my-8" />
 
       <div className="text-center py-8">
@@ -159,6 +173,8 @@ export default function WeightedGPACalculatorPage() {
           </Link>
         </Button>
       </div>
+
+      <LastUpdated />
 
       <script
         type="application/ld+json"

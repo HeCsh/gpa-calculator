@@ -3,9 +3,14 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { QuickAnswer } from "@/components/shared/QuickAnswer";
+import { FAQSection } from "@/components/shared/FAQSection";
+import { LastUpdated } from "@/components/shared/LastUpdated";
+import { HOW_IT_WORKS_FAQS } from "@/data/seoContent";
 
 export const metadata: Metadata = {
-  title: "How GPA Calculation Works",
+  title: "How GPA Calculation Works — 2025-2026 Guide",
   description:
     "Learn how different GPA systems work — unweighted, weighted, and UC GPA. Understand grade scales, course boosts, and special rules.",
   alternates: {
@@ -16,6 +21,8 @@ export const metadata: Metadata = {
 export default function HowItWorksPage() {
   return (
     <article className="container mx-auto px-4 py-12 max-w-3xl">
+      <Breadcrumbs items={[{ label: "How It Works", href: "/how-it-works" }]} />
+
       <h1 className="text-3xl md:text-4xl font-bold mb-4">
         How GPA Calculation Works
       </h1>
@@ -23,6 +30,11 @@ export default function HowItWorksPage() {
         A complete guide to understanding the different GPA systems used by high
         schools and colleges across the US.
       </p>
+
+      <QuickAnswer
+        question="How do you calculate GPA?"
+        answer="Multiply each course's grade points by its credits, add them up, then divide by total credits. For weighted GPA, add boost points (+1.0 for AP, +0.5 for Honors) before multiplying."
+      />
 
       <Separator className="my-8" />
 
@@ -312,6 +324,8 @@ export default function HowItWorksPage() {
         </ol>
       </section>
 
+      <FAQSection faqs={HOW_IT_WORKS_FAQS} />
+
       <Separator className="my-8" />
 
       {/* Related Pages */}
@@ -360,6 +374,8 @@ export default function HowItWorksPage() {
         </Button>
       </div>
 
+      <LastUpdated />
+
       {/* JSON-LD structured data — Article */}
       <script
         type="application/ld+json"
@@ -370,6 +386,7 @@ export default function HowItWorksPage() {
             headline: "How GPA Calculation Works",
             description:
               "A complete guide to understanding unweighted, weighted, and UC GPA systems.",
+            dateModified: "2026-02-01",
             author: {
               "@type": "Organization",
               name: "GPA Calculator",

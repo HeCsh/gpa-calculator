@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { CollegeSearch } from "@/components/calculator/CollegeSearch";
@@ -11,6 +12,37 @@ import { BoostEditor } from "@/components/calculator/BoostEditor";
 import { GPAExplainer } from "@/components/calculator/GPAExplainer";
 import { SemesterTabs } from "@/components/calculator/SemesterTabs";
 import { useGPACalculator } from "@/hooks/useGPACalculator";
+import { getCollegeById } from "@/data/topColleges";
+
+function CollegePreSelector({ setSelectedCollege }: { setSelectedCollege: (c: { id: string; name: string; state: string; system: string }) => void }) {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const collegeParam = searchParams.get("college");
+    if (!collegeParam) return;
+    const topCollege = getCollegeById(collegeParam);
+    if (topCollege) {
+      import("@/data/colleges.json").then((mod) => {
+        const colleges = mod.default as { id: string; name: string; state: string; system: string }[];
+        const match = colleges.find(
+          (c) => c.name === topCollege.name || c.id === collegeParam
+        );
+        if (match) {
+          setSelectedCollege(match);
+        } else {
+          setSelectedCollege({
+            id: topCollege.id,
+            name: topCollege.name,
+            state: "",
+            system: topCollege.system,
+          });
+        }
+      });
+    }
+  }, [searchParams, setSelectedCollege]);
+
+  return null;
+}
 
 export default function CalculatorPage() {
   const {
@@ -46,6 +78,10 @@ export default function CalculatorPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
+      <Suspense>
+        <CollegePreSelector setSelectedCollege={setSelectedCollege} />
+      </Suspense>
+
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">GPA Calculator</h1>
         <p className="text-muted-foreground">

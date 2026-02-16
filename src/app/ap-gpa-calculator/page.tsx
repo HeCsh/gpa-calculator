@@ -3,9 +3,14 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { QuickAnswer } from "@/components/shared/QuickAnswer";
+import { FAQSection } from "@/components/shared/FAQSection";
+import { LastUpdated } from "@/components/shared/LastUpdated";
+import { AP_FAQS } from "@/data/seoContent";
 
 export const metadata: Metadata = {
-  title: "AP GPA Calculator — How AP Classes Affect Your GPA",
+  title: "AP GPA Calculator 2025-2026 — How AP Classes Affect Your GPA",
   description:
     "Free AP GPA calculator. See how Advanced Placement courses boost your weighted GPA. Calculate the impact of AP classes on your college application GPA.",
   alternates: {
@@ -16,6 +21,8 @@ export const metadata: Metadata = {
 export default function APGPACalculatorPage() {
   return (
     <article className="container mx-auto px-4 py-12 max-w-3xl">
+      <Breadcrumbs items={[{ label: "AP GPA Calculator", href: "/ap-gpa-calculator" }]} />
+
       <h1 className="text-3xl md:text-4xl font-bold mb-4">
         AP GPA Calculator
       </h1>
@@ -24,6 +31,11 @@ export default function APGPACalculatorPage() {
         Calculate the boost from AP classes and plan your course load
         strategically.
       </p>
+
+      <QuickAnswer
+        question="How much do AP classes boost your GPA?"
+        answer="AP classes receive a +1.0 boost on the weighted GPA scale. An A in AP is worth 5.0 points (instead of 4.0), and a B is worth 4.0 (instead of 3.0). This is the highest standard course boost."
+      />
 
       <div className="flex gap-4 mb-8">
         <Button asChild size="lg">
@@ -157,6 +169,8 @@ export default function APGPACalculatorPage() {
         </div>
       </section>
 
+      <FAQSection faqs={AP_FAQS} />
+
       <Separator className="my-8" />
 
       <div className="text-center py-8">
@@ -174,6 +188,8 @@ export default function APGPACalculatorPage() {
           </Link>
         </Button>
       </div>
+
+      <LastUpdated />
 
       <script
         type="application/ld+json"

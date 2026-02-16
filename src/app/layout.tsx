@@ -17,8 +17,8 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   title: {
-    default: "GPA Calculator — Weighted, Unweighted & UC GPA for High School",
-    template: "%s | GPA Calculator",
+    default: "GPA Calculator 2025-2026 — Weighted, Unweighted & UC GPA for High School",
+    template: "%s | GPA Calculator 2025-2026",
   },
   description:
     "Free GPA calculator for high school students. Calculate your unweighted, weighted, and UC GPA. Supports AP, IB, Honors courses. Target any US college.",

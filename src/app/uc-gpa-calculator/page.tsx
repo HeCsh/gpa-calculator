@@ -3,9 +3,14 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { QuickAnswer } from "@/components/shared/QuickAnswer";
+import { FAQSection } from "@/components/shared/FAQSection";
+import { LastUpdated } from "@/components/shared/LastUpdated";
+import { UC_FAQS } from "@/data/seoContent";
 
 export const metadata: Metadata = {
-  title: "UC GPA Calculator — Calculate Your Capped & Uncapped UC GPA",
+  title: "UC GPA Calculator 2025-2026 — Calculate Your Capped & Uncapped UC GPA",
   description:
     "Free UC GPA calculator for high school students applying to University of California schools. Calculate your UC Capped Weighted, Uncapped Weighted, and Unweighted GPA with a-g course validation.",
   alternates: {
@@ -16,6 +21,8 @@ export const metadata: Metadata = {
 export default function UCGPACalculatorPage() {
   return (
     <article className="container mx-auto px-4 py-12 max-w-3xl">
+      <Breadcrumbs items={[{ label: "UC GPA Calculator", href: "/uc-gpa-calculator" }]} />
+
       <h1 className="text-3xl md:text-4xl font-bold mb-4">
         UC GPA Calculator
       </h1>
@@ -24,6 +31,11 @@ export default function UCGPACalculatorPage() {
         UC Capped Weighted, Uncapped Weighted, and Unweighted GPA with full a-g
         course validation.
       </p>
+
+      <QuickAnswer
+        question="What is a good UC GPA?"
+        answer="A UC capped weighted GPA of 3.5+ is competitive for most UC campuses. For UC Berkeley and UCLA, aim for 4.0+ capped weighted. The UC system average for admitted students is around 3.7."
+      />
 
       <div className="flex gap-4 mb-8">
         <Button asChild size="lg">
@@ -123,6 +135,8 @@ export default function UCGPACalculatorPage() {
         </p>
       </section>
 
+      <FAQSection faqs={UC_FAQS} />
+
       <Separator className="my-8" />
 
       <div className="text-center py-8">
@@ -138,6 +152,8 @@ export default function UCGPACalculatorPage() {
           </Link>
         </Button>
       </div>
+
+      <LastUpdated />
 
       <script
         type="application/ld+json"

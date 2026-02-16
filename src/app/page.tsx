@@ -3,6 +3,8 @@ import { ArrowRight, Calculator, BookOpen, Settings2, Clock, Shield, BarChart3 }
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FEATURES, GPA_TYPE_INFO, FAQS } from "@/data/seoContent";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { FAQSection } from "@/components/shared/FAQSection";
 
 const ICONS = [Calculator, BarChart3, Settings2, Clock, BookOpen, Shield];
 
@@ -12,13 +14,14 @@ export default function HomePage() {
       {/* Hero */}
       <section className="py-20 md:py-28">
         <div className="container mx-auto px-4 text-center">
+          <Breadcrumbs items={[]} />
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
             Calculate Your{" "}
             <span className="text-primary">High School GPA</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 text-left">
-            Free GPA calculator that supports weighted, unweighted, UC's and other college GPA
-            systems. Target any US college and see your GPA calculated their way. Customize the boost values to match your school's exact system.
+            Free GPA calculator that supports weighted, unweighted, UC&apos;s and other college GPA
+            systems. Target any US college and see your GPA calculated their way. Customize the boost values to match your school&apos;s exact system.
           </p>
           <div className="flex gap-4 justify-center">
             <Button asChild size="lg">
@@ -103,17 +106,7 @@ export default function HomePage() {
       {/* FAQ */}
       <section className="py-16 bg-muted/40">
         <div className="container mx-auto px-4 max-w-3xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">
-            Frequently Asked Questions
-          </h2>
-          <div className="space-y-6">
-            {FAQS.map((faq) => (
-              <div key={faq.question}>
-                <h3 className="font-semibold mb-2">{faq.question}</h3>
-                <p className="text-sm text-muted-foreground">{faq.answer}</p>
-              </div>
-            ))}
-          </div>
+          <FAQSection faqs={FAQS} />
         </div>
       </section>
 
@@ -153,24 +146,6 @@ export default function HomePage() {
               price: "0",
               priceCurrency: "USD",
             },
-          }),
-        }}
-      />
-      {/* JSON-LD structured data — FAQPage */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: FAQS.map((faq) => ({
-              "@type": "Question",
-              name: faq.question,
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: faq.answer,
-              },
-            })),
           }),
         }}
       />
