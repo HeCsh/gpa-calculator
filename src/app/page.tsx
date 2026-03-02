@@ -3,7 +3,6 @@ import { ArrowRight, Calculator, BookOpen, Settings2, Clock, Shield, BarChart3 }
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FEATURES, GPA_TYPE_INFO, FAQS } from "@/data/seoContent";
-import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { FAQSection } from "@/components/shared/FAQSection";
 
 const ICONS = [Calculator, BarChart3, Settings2, Clock, BookOpen, Shield];
@@ -14,7 +13,6 @@ export default function HomePage() {
       {/* Hero */}
       <section className="py-20 md:py-28">
         <div className="container mx-auto px-4 text-center">
-          <Breadcrumbs items={[]} />
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
             Calculate Your{" "}
             <span className="text-primary">High School GPA</span>
